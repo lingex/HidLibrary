@@ -1,0 +1,31 @@
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  Version.MajorMinor: '3.2'
+  Version.Semantic: $[format('{0}.{1}', variables['Version.MajorMinor'],
+    counter(variables['Version.MajorMinor'], 0))]
+  Version.Assembly: '$(Version.Semantic).0'
+  Year: $[format('{0:yyyy}', Pipeline.StartTime)]
+
+steps:
+  - task: Assembly-Info-NetFramework@2
+    inputs:
+      Path: '$(Build.SourcesDirectory)'
+      FileNames: 'src\HidLibrary\Properties\AssemblyInfo.cs'
+      InsertAttributes: false
+      FileEncoding: 'auto'
+      WriteBOM: false
+      Title: 'Hid Library'
+      Product: 'Hid Library'
+      Description: 'Hid Device Communication Library'
+      Company: 'Ultraviolet Catastrophe'
+      Copyright: 'Copyright © $(Year) Ultraviolet Catastrophe'
+      Trademark: 'Hid Library'
+      Culture: 'en-US'
+      VersionNumber: '$(Version.Assembly)'
+      FileVersionNumber: '$(Version.Assembly)'
+      InformationalVersion: '$(Version.Assembly)'
+      LogLevel: 'verbose'
+      FailOnWarning: false
+      Configuration: 'Release'
